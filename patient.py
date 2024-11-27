@@ -39,26 +39,27 @@ ueno_koudai = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽
 
 ogino_nao = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
              ["心音に変わりはない。","心臓の音に変化は見られない。","心音に変化なく自覚症状もなし。"],
-             [],
-             []
+             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"],
+             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
             ]
 
 nakamura_yayoi = [["表情に変わりなし。","表情や機嫌に変わりなし。","無表情だが時折笑顔が見られる。","表情にお変わりなし"],
                   ["冷蔵庫の確認実施。期限切れはない。","冷蔵庫の確認実施。期限切れのものはない。","冷蔵庫の確認実施。期限切れのものは見当たらない。","冷蔵庫の確認実施。期限切れはない。",],                  
                   ["便秘傾向が続いているとのこと。","夜間頻尿による寝不足を訴える。","右手首の疼痛訴えあり。","夜間頻尿による寝不足あり。"],
                   ["次回受診日に上記症状を相談する旨お伝え。","症状が良くならなければ受信時に相談するよう伝えた。","次回受診日に上記症状を相談する旨お伝え。","次回受診日に上記症状を相談する旨お伝え。",],
-                   ]
+                  [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
+                ]
 
 araki_ion = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
              ["施設や職場でトラブルなし。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
              ["表情のスケールは9","asd"],
-             ["表情のスケールは9","ASD"]
+             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
             ]
 
 nakamura_kiyomi = [["表情に変わりなし。","表情や機嫌に変わりなし。","無表情だが反応に変わりなし。","表情険しいが反応は普段通り。"],
                    ["表情のスケールは9","表情スケールは8","表情スケールは10","表情のスケールは9"],
-                   ["職場との切り替えはうまくいっているとのこと","気持ちの切り替えはうまくいっていないとのこと",""],
-                   ["表情のスケールは9",]
+                   ["職場との切り替えはうまくいっているとのこと。","気持ちの切り替えはうまくいっていないとのこと。","職場で注意されずにうまくやれているとのこと。","仕事は楽しいとのこと。"],
+                   [f"{season[season_num][int(random.randint(0, 1))]}体調管理はできている。",f"{season[season_num][int(random.randint(0, 1))]}体調に変わりはないと話される。",f"{season[season_num][int(random.randint(0, 1))]}体調管理はできていますと話される。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないと仰せ。"]
                   ]
 
 patient_data = [masuyama_keiji,nishimaki_kazuhisa,oka_katsunori,ueno_koudai,ogino_nao,nakamura_yayoi,araki_ion,nakamura_kiyomi]
