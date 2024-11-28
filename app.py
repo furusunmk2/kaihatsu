@@ -4,14 +4,13 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
-
 import patient
 
 app = Flask(__name__)
 
 # 環境変数からLINE APIの情報を取得
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("+gQumJJHJQxrpVrkPBaCF1DkaCzYz/0y8hNhO3YTKgFFH93HoTptGROl51saav2RtJKY4naYF6v1MO/avDBKMP4rAX9Vz8Kh7V1KED9mTpb0MO/URsCWyMYBXFS7L6cxhp70YMDZgZtYhLxwJaBTPwdB04t89/1O/w1cDnyilFU=")
-LINE_CHANNEL_SECRET = os.getenv("3a723eb83e194f6c6dbf37f772057338")
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 
 if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_CHANNEL_SECRET:
     raise ValueError("環境変数 'LINE_CHANNEL_ACCESS_TOKEN' または 'LINE_CHANNEL_SECRET' が設定されていません")
@@ -22,7 +21,9 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 @app.route("/callback", methods=['POST'])
 def callback():
     # X-Line-Signatureヘッダーを取得
-    signature = request.headers['X-Line-Signature']
+    signature = request.headers.get('X-Line-Signature')
+    if not signature:
+        abort(400, "X-Line-Signatureヘッダーが見つかりません")
 
     # リクエストボディを取得
     body = request.get_data(as_text=True)
@@ -30,7 +31,7 @@ def callback():
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        abort(400)
+        abort(400, "不正な署名です")
 
     return 'OK'
 
@@ -79,7 +80,5 @@ def generate_patient_response(indices):
     return response_text
 
 if __name__ == "__main__":
-    import os
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
