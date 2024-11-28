@@ -51,9 +51,9 @@ nakamura_yayoi = [["表情に変わりなし。","表情や機嫌に変わりな
                 ]
 
 araki_ion = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
-             ["施設や職場でトラブルなし。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
+             ["施設や職場でトラブルなく過ごせている。","施設や職場でトラブルなし。","施設や職場でトラブルはないと。","人間関係でトラブルないと話される。"],
              ["表情のスケールは9","asd"],
-             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
+             [f"{season[season_num][int(random.randint(0, 1))]}体調管理はできていると仰せ",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
             ]
 
 nakamura_kiyomi = [["表情に変わりなし。","表情や機嫌に変わりなし。","無表情だが反応に変わりなし。","表情険しいが反応は普段通り。"],
