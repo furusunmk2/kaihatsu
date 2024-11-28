@@ -32,15 +32,15 @@ oka_katsunori = [["本日入浴介助、髭剃り、創部の処置など介入�
                 ]
 
 ueno_koudai = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
-               ["部屋は散らかっているため部屋の清掃を一緒に行った。","部屋は比較的整理されている。","部屋は自分が訪問する前に急いで綺麗にしたとのこと","模様替えされており、整理ができていないため一緒に片づけを行った。"],
-               ["人間関係等でストレスはないとのこと。","","ご機嫌な様子。","楽しそうなご様子。"],
-               []
+               ["部屋は散らかっているため部屋の清掃を一緒に行った。","部屋は比較的整理されている。","部屋は自分が訪問する前に急いで綺麗にしたと話される","模様替えされており、整理ができていないため一緒に片づけを行った。"],
+               ["人間関係等でストレスはないとのこと。","対人関係でストレスはないとのこと。","対人関係でトラブルなく過ごせているとのこと。","対人関係でストレスはないとのこと。"],
+               [f"{season[season_num][int(random.randint(0, 1))]}体調管理はできていると仰せ",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
               ]
 
 ogino_nao = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
              ["心音に変わりはない。","心臓の音に変化は見られない。","心音に変化なく自覚症状もなし。"],
-             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"],
-             [f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
+             [f"{season[season_num][int(random.randint(0, 1))]}体調に変わりはないとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調は変化がないとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"],
+             ["抹消冷感あるため保湿や衣類での調整を促した。","抹消に冷感あるためクリームでの保湿や衣類での調整を促した。","抹消冷感著名明。クリームでの保湿や衣類での調整を促した。"]
             ]
 
 nakamura_yayoi = [["表情に変わりなし。","表情や機嫌に変わりなし。","無表情だが時折笑顔が見られる。","表情にお変わりなし"],
@@ -52,7 +52,6 @@ nakamura_yayoi = [["表情に変わりなし。","表情や機嫌に変わりな
 
 araki_ion = [["表情良好。","機嫌よい。","ご機嫌な様子。","楽しそうなご様子。"],
              ["施設や職場でトラブルなく過ごせている。","施設や職場でトラブルなし。","施設や職場でトラブルはないと。","人間関係でトラブルないと話される。"],
-             ["表情のスケールは9","asd"],
              [f"{season[season_num][int(random.randint(0, 1))]}体調管理はできていると仰せ",f"{season[season_num][int(random.randint(0, 1))]}体調管理は万全とのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調管理には自信があるとのこと。",f"{season[season_num][int(random.randint(0, 1))]}体調に変化なく良好。",f"{season[season_num][int(random.randint(0, 1))]}特に体調に変わりはないとのこと。"]
             ]
 
