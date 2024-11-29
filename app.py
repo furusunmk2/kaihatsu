@@ -4,14 +4,24 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
-import patient
+import patient 
+from dotenv import load_dotenv
+
+
+# .env ファイルを読み込む
+load_dotenv()
+
+# 環境変数を取得
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
+
+
 
 app = Flask(__name__)
 
 # 環境変数からLINE APIの情報を取得
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
-
+print(f"LINE_CHANNEL_ACCESS_TOKEN: {LINE_CHANNEL_ACCESS_TOKEN}")
+print(f"LINE_CHANNEL_SECRET: {LINE_CHANNEL_SECRET}")
 if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_CHANNEL_SECRET:
     raise ValueError("環境変数 'LINE_CHANNEL_ACCESS_TOKEN' または 'LINE_CHANNEL_SECRET' が設定されていません")
 
