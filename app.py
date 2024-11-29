@@ -54,7 +54,7 @@ def handle_message(event):
     if patient_num == "きずな":
         response_text = generate_patient_response(range(4))
     elif patient_num == "つなぐ":
-        response_text = generate_patient_response(range(4, 9))
+        response_text = generate_patient_response(range(4, 8))
     else:
         matched = False
         for i in range(8):
@@ -85,7 +85,7 @@ def generate_patient_response(indices):
 
     # テキスト形式に変換
     response_text = "\n".join([
-        f"{info['name']}: {', '.join(info['data'])}" for info in response_data
+        f"{info['name']}: {'\n'.join(info['data'])}" for info in response_data
     ])
     return response_text
 
