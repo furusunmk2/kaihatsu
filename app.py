@@ -85,7 +85,7 @@ def generate_patient_response(indices):
 
     # テキスト形式に変換
     response_text = "\n".join([
-        f"{info['name']}:\n " + "\n- ".join(info['data']) for info in response_data
+        f"{info['name']}:\n " + "\n ".join(info['data']) for info in response_data
     ])
 
 
