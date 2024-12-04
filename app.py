@@ -1,5 +1,4 @@
 from flask import Flask, request, abort, jsonify
-import random
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
