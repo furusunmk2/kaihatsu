@@ -28,20 +28,24 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    # X-Line-Signatureヘッダーを取得
     signature = request.headers.get('X-Line-Signature')
+    body = request.get_data(as_text=True)
+
+    # デバッグログ
+    print(f"Request body: {body}")
+    print(f"X-Line-Signature: {signature}")
+
     if not signature:
         abort(400, "X-Line-Signatureヘッダーが見つかりません")
-
-    # リクエストボディを取得
-    body = request.get_data(as_text=True)
 
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("InvalidSignatureError: 不正な署名です")
         abort(400, "不正な署名です")
 
     return 'OK'
+
 
 # LINEメッセージイベントの処理
 @handler.add(MessageEvent, message=TextMessage)
