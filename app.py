@@ -12,7 +12,9 @@ load_dotenv()
 # 環境変数を取得
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
-
+GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
+genai.configure(api_key=GOOGLE_API_KEY)
+gemini_pro = genai.GenerativeModel("gemini-pro")
 
 
 app = Flask(__name__)
@@ -54,10 +56,7 @@ def handle_message(event):
     response_text = ""
 
     
-    GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
-    genai.configure(api_key=GOOGLE_API_KEY)
- 
-    gemini_pro = genai.GenerativeModel("gemini-pro")
+
     prompt = "こんにちは"
     response_text = gemini_pro.generate_content(prompt)
  
