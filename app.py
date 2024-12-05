@@ -4,7 +4,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
 from dotenv import load_dotenv
-
+import google.generativeai as genai
 
 # .env ファイルを読み込む
 load_dotenv()
@@ -50,13 +50,16 @@ def callback():
 # LINEメッセージイベントの処理
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    patient_num = event.message.text.strip()  # ユーザーの入力を取得
+    word = event.message.text.strip()  # ユーザーの入力を取得
     response_text = ""
 
-    if len(patient_num) % 2 == 0:
-        response_text = "渡辺です"
-    else:    
-        response_text = "富永です"
+    
+    GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
+    genai.configure(api_key=GOOGLE_API_KEY)
+ 
+    gemini_pro = genai.GenerativeModel("gemini-pro")
+    prompt = "こんにちは"
+    response_text = gemini_pro.generate_content(prompt)
  
     # ユーザーに返信
     line_bot_api.reply_message(
