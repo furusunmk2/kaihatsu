@@ -12,14 +12,13 @@ load_dotenv()
 # 環境変数を取得
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
-GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 gemini_pro = genai.GenerativeModel("gemini-pro")
 
-
 app = Flask(__name__)
 
-# 環境変数からLINE APIの情報を取得
+# 環境変数チェック
 print(f"LINE_CHANNEL_ACCESS_TOKEN: {LINE_CHANNEL_ACCESS_TOKEN}")
 print(f"LINE_CHANNEL_SECRET: {LINE_CHANNEL_SECRET}")
 if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_CHANNEL_SECRET:
@@ -52,14 +51,18 @@ def callback():
 # LINEメッセージイベントの処理
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    word = event.message.text.strip()  # ユーザーの入力を取得
+    user_message = event.message.text.strip()  # ユーザーの入力を取得
     response_text = ""
 
-    
+    try:
+        prompt = f"ユーザーからの入力: {user_message}"
+        response = gemini_pro.generate_content(prompt)
+        print(f"Generated response: {response}")
+        response_text = response.get("content", "応答がありません")
+    except Exception as e:
+        print(f"Error during content generation: {e}")
+        response_text = "エラーが発生しました"
 
-    prompt = "こんにちは"
-    response_text = gemini_pro.generate_content(prompt)
- 
     # ユーザーに返信
     line_bot_api.reply_message(
         event.reply_token,
@@ -69,6 +72,3 @@ def handle_message(event):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-
-
