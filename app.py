@@ -55,16 +55,17 @@ def handle_message(event):
     response_text = ""
 
     try:
+        print("Attempting to generate content...")
         prompt = f"ユーザーからの入力: {user_message}"
         response = gemini_pro.generate_content(prompt)
-        print(f"Generated response: {response}")
+        print(f"Response received: {response}")
         response_text = response.get("content", "応答がありません")
+    except AttributeError as ae:
+        print(f"AttributeError: {ae}")
+        response_text = "gemini-proモデルの使用に失敗しました。"
     except Exception as e:
-        # エラー内容を詳細に表示
-        print(f"Error during content generation: {e}")
+        print(f"Unexpected Error: {e}")
         response_text = f"エラーが発生しました: {str(e)}"
-
-
     # ユーザーに返信
     line_bot_api.reply_message(
         event.reply_token,
