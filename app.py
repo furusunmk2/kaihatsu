@@ -60,8 +60,10 @@ def handle_message(event):
         print(f"Generated response: {response}")
         response_text = response.get("content", "応答がありません")
     except Exception as e:
+        # エラー内容を詳細に表示
         print(f"Error during content generation: {e}")
-        response_text = "エラーが発生しました"
+        response_text = f"エラーが発生しました: {str(e)}"
+
 
     # ユーザーに返信
     line_bot_api.reply_message(
