@@ -59,6 +59,7 @@ def callback():
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_message = event.message.text.strip()
     response_text = ""
@@ -71,12 +72,16 @@ def handle_message(event):
         response = model.generate_content(f"{prompt}")
         print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
 
-        # レスポンスが存在し、候補が含まれている場合に処理を続行
+        # 応答候補が存在する場合
         if response and response.candidates:
-            # 最初の候補のテキスト部分を取得
             first_candidate = response.candidates[0]
-            response_text = first_candidate.content.parts[0].text  # ここで属性を利用
+            print(f"First Candidate: {first_candidate}")  # 候補を詳細にデバッグ
+
+            # parts配列から最初のテキストを取得
+            response_text = first_candidate.content.parts[0].text
+            print(f"Generated Text: {response_text}")  # 応答テキストをデバッグ出力
         else:
+            print("No candidates found in the response.")  # 応答が空の場合
             response_text = "AIからの応答が生成されませんでした。"
     except AttributeError as e:
         print(f"AttributeError in response handling: {e}")
