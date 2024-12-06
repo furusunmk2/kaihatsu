@@ -23,10 +23,13 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if genai_available and GOOGLE_API_KEY:
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
+        gemini_pro = genai.GenerativeModel("gemini-pro")
         print("Google Generative AI configured successfully.")
     except Exception as e:
+        gemini_pro = None
         print(f"Failed to configure Google Generative AI: {e}")
-        genai_available = False
+else:
+    gemini_pro = None
 
 app = Flask(__name__)
 
@@ -61,15 +64,15 @@ def handle_message(event):
     response_text = ""
 
     try:
-        if genai_available:
+        if gemini_pro:
             prompt = f"ユーザーからの入力: {user_message}"
-            response = genai.generate_text(prompt=prompt)  # 修正ポイント
+            response = gemini_pro.generate_content(prompt)
             
             # レスポンス全体をデバッグ出力
-            print(f"GenerateTextResponse: {response}")
-            
-            # 適切なプロパティを使用して応答を生成
-            response_text = response.candidates[0]['output'] if response.candidates else "応答が生成されませんでした。"
+            print(f"GenerateContentResponse: {response}")
+
+            # 正しい属性を確認して取得する
+            response_text = response
         else:
             response_text = "Google Generative AIが利用できないため応答を生成できません。"
     except Exception as e:
