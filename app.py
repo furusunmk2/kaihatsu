@@ -4,13 +4,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
 from dotenv import load_dotenv
-
-try:
-    import google.generativeai as genai
-    genai_available = True
-except ImportError as e:
-    print(f"Google Generative AI module not found: {e}")
-    genai_available = False
+import google.generativeai as genai  # 正しいライブラリをインポート
 
 # Load .env file
 load_dotenv()
@@ -20,16 +14,8 @@ LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-if genai_available and GOOGLE_API_KEY:
-    try:
-        genai.configure(api_key=GOOGLE_API_KEY)
-        gemini_pro = genai.GenerativeModel("gemini-pro")
-        print("Google Generative AI configured successfully.")
-    except Exception as e:
-        gemini_pro = None
-        print(f"Failed to configure Google Generative AI: {e}")
-else:
-    gemini_pro = None
+# Configure Google Generative AI
+genai.configure(api_key=GOOGLE_API_KEY)
 
 app = Flask(__name__)
 
@@ -64,21 +50,23 @@ def handle_message(event):
     response_text = ""
 
     try:
-        if gemini_pro:
-            prompt = f"ユーザーからの入力: {user_message}"
-            response = gemini_pro.generate_content(prompt)
-            
-            # レスポンス全体をデバッグ出力
-            print(f"GenerateContentResponse: {response}")
-
-            # 正しい属性を確認して取得する
-            response_text = response
+        # Google Generative AIでテキストを生成
+        prompt = f"ユーザーからの入力: {user_message}"
+        response = genai.generate_content(prompt=prompt)  # 最新の仕様に基づいたメソッド
+        
+        # デバッグ用にレスポンス全体をログに出力
+        print(f"GenerateContentResponse: {response}")
+        
+        # レスポンスから生成テキストを抽出
+        if hasattr(response, 'candidates') and len(response.candidates) > 0:
+            response_text = response.candidates[0]['output']
         else:
-            response_text = "Google Generative AIが利用できないため応答を生成できません。"
+            response_text = "応答が生成されませんでした。"
     except Exception as e:
         print(f"Error during content generation: {e}")
         response_text = f"エラーが発生しました: {str(e)}"
 
+    # LINEユーザーへの応答を送信
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=response_text)
