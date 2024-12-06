@@ -68,8 +68,11 @@ def handle_message(event):
             prompt = f"ユーザーからの入力: {user_message}"
             response = gemini_pro.generate_content(prompt)
             
-            # GenerateContentResponse オブジェクトからテキストを取得
-            response_text = response.content if response.content else "応答が生成されませんでした。"
+            # レスポンス全体をデバッグ出力
+            print(f"GenerateContentResponse: {response}")
+
+            # 正しい属性を確認して取得する
+            response_text = getattr(response, "content", "応答が生成されませんでした。")
         else:
             response_text = "Google Generative AIが利用できないため応答を生成できません。"
     except Exception as e:
