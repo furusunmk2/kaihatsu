@@ -63,28 +63,35 @@ def handle_message(event):
     user_message = event.message.text.strip()
     response_text = ""
     prompt = f"ユーザーからの入力: {user_message}"
-    print(f"Generated Prompt: {prompt}")
+    print(f"Generated Prompt: {prompt}")  # プロンプトをデバッグ出力
 
     try:
         # Google Generative AIで応答を生成
-        response = genai.generate_content(prompt=f"{prompt}")
-        print(f"Raw response: {response}")  # レスポンス全体を確認
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(f"{prompt}")
+        print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
 
-        # レスポンス解析
-        if response and 'candidates' in response and len(response['candidates']) > 0:
-            response_text = response['candidates'][0]['output']  # 最初の候補を取得
+        # レスポンスがNoneでないかを確認
+        if response is None:
+            response_text = "AI応答が空です。"
         else:
-            response_text = "AI応答が生成されませんでした。"
+            # レスポンス内の属性を安全に取得
+            response_text = getattr(response, "content", None)
+            if not response_text:  # 属性が空の場合
+                response_text = "AIからの応答が生成されませんでした。"
+    except AttributeError as e:
+        print(f"AttributeError in response handling: {e}")
+        response_text = "AI応答の処理中にエラーが発生しました。"
     except Exception as e:
         print(f"Unexpected error during AI content generation: {e}")
         response_text = f"AI応答の生成中にエラーが発生しました: {str(e)}"
 
+    # 最終的な応答をデバッグ出力
     print(f"Final Response Text: {response_text}")
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=response_text)
     )
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
