@@ -72,13 +72,11 @@ def handle_message(event):
         print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
 
         # レスポンスがNoneでないかを確認
-        if response is None:
-            response_text = "AI応答が空です。"
+        if response and response.result and response.result.candidates:
+            # 応答の候補リストから最初のテキスト部分を取得
+            response_text = response.result.candidates[0].content["parts"][0]["text"]
         else:
-            # レスポンス内の属性を安全に取得
-            response_text = getattr(response, "content", None)
-            if not response_text:  # 属性が空の場合
-                response_text = "AIからの応答が生成されませんでした。"
+            response_text = "AIからの応答が生成されませんでした。"
     except AttributeError as e:
         print(f"AttributeError in response handling: {e}")
         response_text = "AI応答の処理中にエラーが発生しました。"
