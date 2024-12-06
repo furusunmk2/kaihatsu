@@ -76,7 +76,7 @@ def handle_message(event):
             response_text = "AI応答が空です。"
         else:
             # レスポンス内の属性を安全に取得
-            response_text = getattr(response, "content", None)
+            response_text = response
             if not response_text:  # 属性が空の場合
                 response_text = "AIからの応答が生成されませんでした。"
     except AttributeError as e:
