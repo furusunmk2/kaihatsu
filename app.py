@@ -59,36 +59,33 @@ def callback():
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
-@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_message = event.message.text.strip()
     response_text = ""
-    prompt = f"ユーザーからの入力: {user_message}"
+    prompt = f"""以下の文章を敬語表現に変換してください。
+元の文章:
+「{user_message}」
+敬語表現:
+"""
     print(f"Generated Prompt: {prompt}")  # プロンプトをデバッグ出力
 
     try:
-        # Google Generative AIで応答を生成
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(f"{prompt}")
-        print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
+        if gemini_pro:
+            response = gemini_pro.generate_content(prompt)
+            print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
 
-        # 応答候補が存在する場合
-        if response and response.candidates:
-            first_candidate = response.candidates[0]
-            print(f"First Candidate: {first_candidate}")  # 候補を詳細にデバッグ
-
-            # parts配列から最初のテキストを取得
-            response_text = first_candidate.content.parts[0].text
-            print(f"Generated Text: {response_text}")  # 応答テキストをデバッグ出力
+            # レスポンスが存在し、候補が含まれている場合に処理を続行
+            if response and response.candidates:
+                response_text = response.candidates[0]["output"]
+                print(f"Generated Text: {response_text}")  # 応答テキストをデバッグ出力
+            else:
+                print("No candidates found in the response.")  # 応答が空の場合
+                response_text = "敬語変換ができませんでした。"
         else:
-            print("No candidates found in the response.")  # 応答が空の場合
-            response_text = "AIからの応答が生成されませんでした。"
-    except AttributeError as e:
-        print(f"AttributeError in response handling: {e}")
-        response_text = "AI応答の処理中にエラーが発生しました。"
+            response_text = "AIサービスが利用できません。"
     except Exception as e:
         print(f"Unexpected error during AI content generation: {e}")
-        response_text = f"AI応答の生成中にエラーが発生しました: {str(e)}"
+        response_text = f"エラーが発生しました: {str(e)}"
 
     # 最終的な応答をデバッグ出力
     print(f"Final Response Text: {response_text}")
@@ -96,7 +93,6 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=response_text)
     )
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
