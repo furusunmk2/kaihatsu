@@ -65,7 +65,7 @@ def handle_message(event):
     response_text = ""
     prompt = f"""以下の文章を敬語表現に変換してください。
 元の文章:
-「{user_message}」
+{user_message}
 敬語表現:
 """
     print(f"Generated Prompt: {prompt}")  # プロンプトをデバッグ出力
