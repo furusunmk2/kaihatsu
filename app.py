@@ -4,6 +4,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
 from dotenv import load_dotenv
+from linebot.models import TemplateSendMessage, ButtonsTemplate, DatetimePickerTemplateAction
+
 
 try:
     import google.generativeai as genai
@@ -102,7 +104,32 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=response_text)
     )
+def send_datetimepicker_message(user_id):
+    # DatetimePickerアクションの作成
+    datetime_picker_action = DatetimePickerTemplateAction(
+        label="Select date",        # ボタンに表示されるラベル
+        data="storeId=12345",       # 選択結果とともに送信されるデータ
+        mode="datetime",            # 日時選択モード
+        initial="2017-12-25T00:00", # 初期選択日時
+        max="2018-01-24T23:59",     # 選択可能な最大日時
+        min="2017-12-25T00:00"      # 選択可能な最小日時
+    )
 
+    # ボタンテンプレートメッセージの作成
+    template_message = TemplateSendMessage(
+        alt_text="日時選択メッセージ",  # LINEアプリ非対応環境用の代替テキスト
+        template=ButtonsTemplate(
+            text="日時を選んでください",  # メッセージ本文
+            actions=[datetime_picker_action]  # ボタンアクションを追加
+        )
+    )
+
+    # メッセージを送信
+    line_bot_api.push_message(user_id, template_message)
+
+# LINEユーザーID（テスト用）
+user_id = "USER_ID"
+send_datetimepicker_message(user_id)
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
