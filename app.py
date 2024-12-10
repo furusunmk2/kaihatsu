@@ -1,11 +1,12 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, DatetimePickerTemplateAction
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import os
 from dotenv import load_dotenv
+from linebot.models import TemplateSendMessage, ButtonsTemplate, DatetimePickerTemplateAction
 
-# Google Generative AI（Gemini）ライブラリのインポート
+
 try:
     import google.generativeai as genai
     genai_available = True
@@ -21,7 +22,6 @@ LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-# Initialize Google Generative AI (Gemini)
 if genai_available and GOOGLE_API_KEY:
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
@@ -33,7 +33,6 @@ if genai_available and GOOGLE_API_KEY:
 else:
     gemini_pro = None
 
-# Initialize Flask app
 app = Flask(__name__)
 
 if not LINE_CHANNEL_ACCESS_TOKEN or not LINE_CHANNEL_SECRET:
@@ -61,74 +60,51 @@ def callback():
 
     return 'OK'
 
-# Handle TextMessage events
+@handler.add(MessageEvent, message=TextMessage)
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_message = event.message.text.strip()
-    user_id = event.source.user_id  # ユーザーIDを取得
     response_text = ""
-
-    # プロンプトの設定（敬語変換）
     prompt = f"""以下の文章を敬語表現に変換してください。
 元の文章:
 {user_message}
 敬語表現:
 """
-    print(f"Generated Prompt: {prompt}")
+    print(f"Generated Prompt: {prompt}")  # プロンプトをデバッグ出力
 
-    # Google Generative AIを使用して応答を生成
     try:
-        if gemini_pro:
-            response = gemini_pro.generate_content(prompt)
-            print(f"GenerateContentResponse: {response}")
+        # Google Generative AIで応答を生成
+        model = genai.GenerativeModel('gemini-pro')
+        response = model.generate_content(f"{prompt}")
+        print(f"GenerateContentResponse: {response}")  # レスポンス全体をデバッグ出力
 
-            if response and response.candidates:
-                response_text = response.candidates[0]["output"]  # 最初の候補のテキスト
-            else:
-                response_text = "敬語変換ができませんでした。"
+        # レスポンスが存在し、候補が含まれている場合に処理を続行
+        # 応答候補が存在する場合
+        if response and response.candidates:
+            # 最初の候補のテキスト部分を取得
+            first_candidate = response.candidates[0]
+            response_text = first_candidate.content.parts[0].text  # ここで属性を利用
+            print(f"First Candidate: {first_candidate}")  # 候補を詳細にデバッグ
+            # parts配列から最初のテキストを取得
+            response_text = first_candidate.content.parts[0].text
+            print(f"Generated Text: {response_text}")  # 応答テキストをデバッグ出力
         else:
-            response_text = "AIサービスが利用できません。"
+            print("No candidates found in the response.")  # 応答が空の場合
+            response_text = "AIからの応答が生成されませんでした。"
+    except AttributeError as e:
+        print(f"AttributeError in response handling: {e}")
+        response_text = "AI応答の処理中にエラーが発生しました。"
     except Exception as e:
-        print(f"Error during AI content generation: {e}")
-        response_text = f"エラーが発生しました: {str(e)}"
+        print(f"Unexpected error during AI content generation: {e}")
+        response_text = f"AI応答の生成中にエラーが発生しました: {str(e)}"
 
-    # 応答をユーザーに送信
+    # 最終的な応答をデバッグ出力
     print(f"Final Response Text: {response_text}")
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=response_text)
     )
 
-    # ユーザーに日時選択ボタンを送信
-    send_datetimepicker_message(user_id)
-
-# Send a datetime picker message
-def send_datetimepicker_message(user_id):
-    # DatetimePickerアクションの作成
-    datetime_picker_action = DatetimePickerTemplateAction(
-        label="Select date",
-        data="storeId=12345",
-        mode="datetime",
-        initial="2017-12-25T00:00",
-        max="2018-01-24T23:59",
-        min="2017-12-25T00:00"
-    )
-
-    # ボタンテンプレートメッセージの作成
-    template_message = TemplateSendMessage(
-        alt_text="日時選択メッセージ",
-        template=ButtonsTemplate(
-            text="日時を選んでください",
-            actions=[datetime_picker_action]
-        )
-    )
-
-    # メッセージを送信
-    try:
-        line_bot_api.push_message(user_id, template_message)
-        print(f"Datetime picker message sent to user: {user_id}")
-    except Exception as e:
-        print(f"Error while sending datetime picker message: {e}")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
